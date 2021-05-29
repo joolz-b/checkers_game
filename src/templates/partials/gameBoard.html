@@ -1,0 +1,12 @@
+<div class="game-board ">
+  {%- for x in range(8) %}
+    <div class="row">
+      {%- for y in range(8) %}
+          <div class="
+          {%- if (y+x) % 2 == 0 %} cell-dark {%- endif %} cell-{{ x~'-'~y }}
+          col-xs-2 cell">{{ x~', '~y }}</div>
+        {%- endfor %}
+        <div class="col-xs-2 cell blank-cell"></div>
+    </div>
+  {%- endfor %}
+</div>

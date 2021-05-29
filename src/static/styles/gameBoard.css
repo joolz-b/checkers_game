@@ -1,0 +1,15 @@
+.cell {
+  background-color: rgb(147, 155, 163);
+  width: 6em;
+  height: 6em;
+  padding: 1em;
+  color: white;
+}
+
+.cell-dark{
+  background-color: rgb(36, 36, 36);
+}
+
+.blank-cell {
+  display: none;
+}
