@@ -1,0 +1,33 @@
+{% extends 'layout.html' %}
+
+{% block title %}Checkers, in the Cloud{% endblock %}
+
+{% block styles %}
+  {{super()}}
+    <link rel="stylesheet" href="{{url_for('static', filename='styles/tutorial.css')}}">
+{% endblock %}
+
+{% block content %}
+  <div class='container'>
+    <h1 class='display-4'>How to Play Checkers</h1>
+    <hr />
+    <h2 class='display-6'>Needed</h2>
+    <p>Two players; checkers board with pieces</p>
+    <h2 class='display-6'>Setup</h2>
+    <p>The board is positioned with the light colored square in the bottom right corner. The checkers for each player are setup on the dark colored squares. Players should have 12 checkers in their first three rows (four in each row).</p>
+    <h2 class='display-6'>Objective</h2>
+    <p>The object of the game is to capture all your opponent’s checkers or trap your opponent so no move can be made.</p>
+    <h2 class='display-6'>Game Play</h2>
+    <p>A single checker can move forward diagonally one space per turn. To capture an opponent’s checker, a player may jump over a diagonally adjacent opponent's checker. 
+      <br />The space on the other side of the opponent’s checker must be open. Multiple checkers can be captured if jumped consecutively with the same checker.
+      <br />If a checker makes it to the other side of the board, it is kinged. To king a checker, another checker is placed on top of it. A kinged checker can move forward or backward on the board.
+      <br />The first player to capture all the opponent’s checkers wins. If a player is unable to make a move, he/she loses the game.
+    </p>
+    <h2 class='display-6'>Rules</h2>
+    <p>A single checker can only move and jump going forward</p>
+
+    <div class="d-flex justify-content-center">
+      <a class='btn btn-primary' href="/">Back</a>
+    </div>
+  </div>
+{% endblock %}

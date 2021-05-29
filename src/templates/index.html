@@ -1,27 +1,24 @@
-{% extends 'bootstrap/base.html' %}
+{% extends 'layout.html' %}
 
 {% block title %}Checkers, in the Cloud{% endblock %}
 
 {% block styles %}
-  {{super()}}
     <link rel="stylesheet" href="{{url_for('static', filename='styles/index.css')}}">
 {% endblock %}
 
 {% block content %}
-  <div class='jumbotron text-center align-middle'>
-    <div class='container'>
-      <h1 class='display-4'>Checkers, in the Cloud!</h1>
-      <p class='lead'>RMIT Cloud Computing Assignment, Semester 1, 2021</p>
+  <div class="h-100 p-5 text-white bg-dark text-center align-middle">
+    <h1 class='display-4'>Checkers, in the Cloud!</h1>
+    <p class='lead'>RMIT Cloud Computing Assignment, Semester 1, 2021</p>
       <hr class="my-4" />
       <p>Built by Cameron van Roon & Julian Bitetto</p>
-    </div>
   </div>
-  <div class='container text-center align-middle'>
-    <div class='row'>
-      <a class='btn btn-lg btn-primary main-btns' href='/game'>Play Now</a>
+  <div class='container'>
+    <div class='row d-flex justify-content-center'>
+      <a class='btn btn-primary main-btns' href='/game'>Play Now</a>
     </div>
-    <div class='row'>
-      <a class='btn btn-lg btn-primary main-btns' target="_blank" href='https://gathertogethergames.com/checkers'>Tutorial</a>
+    <div class='row d-flex justify-content-center'>
+      <a class='btn btn-primary main-btns' href='/tutorial'>Tutorial</a>
     </div>
   </div>
 {% endblock %}

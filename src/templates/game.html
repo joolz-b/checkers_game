@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html>
 
-{% extends 'bootstrap/base.html' %}
+{% extends 'layout.html' %}
 {% block title %}Checkers, in the Cloud{% endblock %}
 
 {% block styles %}
-  {{super()}}
     <link rel="stylesheet" href="{{url_for('static', filename='styles/game.css')}}">
     <link rel="stylesheet" href="{{url_for('static', filename='styles/gameBoard.css')}}">
 {% endblock %}
