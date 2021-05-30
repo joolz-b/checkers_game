@@ -10,6 +10,7 @@
 {% endblock %}
 
 {% block content %}
+  <p>{{ session['username']}} versus Player</p>
   <div class="container text-center align-middle game-body">
     {% include 'partials/gameBoard.html' %}
   </div>
