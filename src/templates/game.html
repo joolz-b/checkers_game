@@ -10,9 +10,15 @@
 {% endblock %}
 
 {% block content %}
-  <p>{{ session['username']}} versus Player</p>
+  <div class='game-info container text-center align-middle'>
+    <p>Waiting for an opponent</p>
+    <div class='loader'></div>
+  </div>
   <div class="container text-center align-middle game-body">
     {% include 'partials/gameBoard.html' %}
+  </div>
+  <div class="game-status container text-center align-middle">
+    <!-- 'Your move', 'Victory/Defeat', etc -->
   </div>
 {% endblock %}
 
