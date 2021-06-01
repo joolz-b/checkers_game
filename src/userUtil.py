@@ -22,5 +22,5 @@ def create_user(username):
   # todo
   return
 
-def logout():
+def logout_user():
   session.clear()

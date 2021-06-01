@@ -4,29 +4,37 @@
 {% block title %}Checkers, in the Cloud{% endblock %}
 
 {% block styles %}
-    <link rel="stylesheet" href="{{url_for('static', filename='styles/login.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='styles/signup.css')}}">
 {% endblock %}
 
 {% block content %}
   
-  <div class='container'>
+  <div class='container signup-body'>
     <h1 class='display-6'>Signup</h1>
-    <form action="" method='post'>
-      <div class="form-group">
-        <label for="username">Username</label>
-        <input type="username" class="form-control" name="username" placeholder="Enter username" required>
+    <form action='' method='POST'>
+      <div class="mb-3">
+        <label for="username" class="form-label">Username</label>
+        <input type="text" class="form-control" id="username" name='username'>
       </div>
-      <div class="form-group">
-        <label for="password">Password</label>
-        <input type="password" class="form-control" name="password" placeholder="Password" required>
+
+      <div class="mb-3">
+        <label for="email" class="form-label">Email</label>
+        <input type="email" class="form-control" id="email" name='email'>
       </div>
-      <div class="form-group">
-        <label for="password_confirm">Confirm Password</label>
-        <input type="password" class="form-control" name="password_confirm" placeholder="Confirm Password" required>
+
+      <div class="mb-3">
+        <label for="password" class="form-label">Password</label>
+        <input type="password" class="form-control" id="password" name='password'>
       </div>
-      <button type="submit" class="btn btn-primary">Signup</button>
+
+      <div class="mb-3">
+        <label for="password-confirm" class="form-label">Confirm Password</label>
+        <input type="password" class="form-control" id="password-confirm" name='password-confirm'>
+      </div>
+     
+      <button type="submit" class="btn btn-primary">Submit</button>
     </form>
-    <a href='/login'>Login here!</a>
+    <a class="login-link" href='/login'>Login here!</a>
   </div>
 {% endblock %}
 

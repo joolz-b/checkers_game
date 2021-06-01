@@ -1,5 +1,5 @@
 from flask import Flask, render_template, session, redirect, url_for, request
-from userUtil import is_user_logged_in, create_user, authenticate_user
+from userUtil import is_user_logged_in, create_user, authenticate_user, logout_user
 
 app = Flask(__name__, template_folder='templates')
 app.secret_key = 'super secret key :)'
@@ -39,6 +39,12 @@ def login():
       # todo: if it doesn't exist, redirect back to login page with errors
       else:
          return redirect(url_for('login'))
+
+@app.route('/logout')
+def logout():
+   logout_user()
+   return redirect(url_for('index'))
+   
 
 @app.route('/signup', methods=['POST', 'GET'])
 def signup():

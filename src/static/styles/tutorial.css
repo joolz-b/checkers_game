@@ -12,3 +12,7 @@ p {
   margin: 1em;
   width: 10em;
 }
+
+.tutorial-body {
+  margin: 0 5em;
+}
