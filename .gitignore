@@ -3,3 +3,4 @@ src/__pycache__/
 secrets.json
 .vscode/
 launch.json
+.env
