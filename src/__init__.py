@@ -1,12 +1,19 @@
+import os
+import sys
+from dotenv import load_dotenv
 from flask import Flask, render_template, session, redirect, url_for, request
-from userUtil import is_user_logged_in, create_user, authenticate_user, logout_user
+from flask_dance.consumer import oauth_authorized
 
-app = Flask(__name__, template_folder='templates')
-app.secret_key = 'super secret key :)'
-app.config['SESSION_TYPE'] = 'filesystem'
+from userUtil import is_user_logged_in, create_user, authenticate_user, logout_user
+from socialUtil import load_socials
+
+app = Flask(__name__)
+load_dotenv()
+load_socials(app)
 
 @app.route('/')
 def index():
+   print(session, file=sys.stderr)
    return render_template('index.html')
 
 # displays the actual game board
@@ -28,7 +35,7 @@ def tutorial():
 def login():
    
    if request.method == 'GET':
-      return render_template('login.html')
+      return render_template('login.html', twitter_login=url_for('twitter.login'))
 
    elif request.method == 'POST':
 
@@ -39,6 +46,13 @@ def login():
       # todo: if it doesn't exist, redirect back to login page with errors
       else:
          return redirect(url_for('login'))
+
+@oauth_authorized.connect
+def login_twitter(blueprint, token):
+
+   if authenticate_user(session['twitter_oauth_token']['screen_name'], sso=True):
+      return redirect(url_for('game'))
+
 
 @app.route('/logout')
 def logout():
