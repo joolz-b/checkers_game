@@ -1,0 +1,20 @@
+{
+    "gameID": "1",
+    "dimension": 8,
+    "currentTurn": 2,
+    "finished":false,
+    "pieces": [
+        {
+            "position_x": 1,
+            "position_y": 3,
+            "king": false,
+            "team": 1
+        },
+        {
+            "position_x": 4,
+            "position_y": 4,
+            "king": true,
+            "team": 2
+        }
+    ]
+}

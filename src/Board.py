@@ -36,12 +36,13 @@ class Board:
                             self.positions[x][y] = piece
         else:
             for piece in pieces:
-                if piece.getTeam() == 1:
-                    self.team_1.append(piece)
+                pieceLoaded = GamePiece((piece['position_x'], piece['position_y']), piece['team'], piece['king'])
+                if pieceLoaded.getTeam() == 1:
+                    self.team_1.append(pieceLoaded)
                 else:
-                    self.team_2.append(piece)
-                pos = piece.getPos()
-                self.positions[pos[0]][pos[1]] = piece
+                    self.team_2.append(pieceLoaded)
+                pos = pieceLoaded.getPos()
+                self.positions[pos[0]][pos[1]] = pieceLoaded
 
 
     def getDimension(self):
@@ -92,8 +93,18 @@ class Board:
     def exportPieces(self):
         pieces = []
         for piece in self.team_1:
+            pieceDict = {}
+            pieceDict['position_x'] = piece.getPos()[0]
+            pieceDict['position_y'] = piece.getPos()[1]
+            pieceDict['team'] = piece.getTeam()
+            pieceDict['king'] = piece.isKing()
             pieces.append(piece)
         for piece in self.team_2:
+            pieceDict = {}
+            pieceDict['position_x'] = piece.getPos()[0]
+            pieceDict['position_y'] = piece.getPos()[1]
+            pieceDict['team'] = piece.getTeam()
+            pieceDict['king'] = piece.isKing()
             pieces.append(piece)
         return pieces
 
