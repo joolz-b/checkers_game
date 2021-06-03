@@ -1,3 +1,9 @@
+.btn {
+  display: block;
+  width: 14em;
+  margin: 1em 0;
+}
+
 .login-body {
   margin: 0 5em;
   padding: 1em;

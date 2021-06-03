@@ -24,9 +24,15 @@
      
       <button type="submit" class="btn btn-primary">Submit</button>
     </form>
-    <a class="sign-up-link" href='{{ twitter_login }}'>Login with Twitter</a>
-    <a class="sign-up-link" href='/login-facebook'>Login with Facebook</a>
+    <hr />
+    <a id="twitter-button" class="btn btn-block btn-social btn-twitter" href='{{ twitter_login }}'>
+      <i class="fa fa-twitter"></i> Sign in with Twitter
+    </a>
+    <a id="facebook-button" class="btn btn-block btn-social btn-facebook" href=''>
+      <i class="fa fa-facebook"></i> Sign in with Facebook
+    </a>
     <a class="sign-up-link" href='/signup'>Sign up here!</a>
+    
   </div>
 {% endblock %}
 
