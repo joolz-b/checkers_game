@@ -52,7 +52,7 @@ def tutorial():
 def login():
    
    if request.method == 'GET':
-      return render_template('login.html', twitter_login=url_for('twitter.login'))
+      return render_template('login.html', twitter_login=url_for('twitter.login'), facebook_login=url_for('facebook.login'))
 
    elif request.method == 'POST':
 
@@ -64,14 +64,19 @@ def login():
       else:
          return redirect(url_for('login'))
 
-@app.route('/authorize_twitter')
-def authorize_twitter():
+@app.route('/authorize')
+def authorize():
 
    resp = twitter.get("account/verify_credentials.json")
 
-   print(resp, file=sys.stderr)
-   if authenticate_user(username=resp.json()['screen_name'],sso=True):
-      return redirect(url_for('game'))
+   # facebook login
+   if (resp == None):
+      resp = facebook.get("/me")
+
+   # twitter login
+   else:
+      if authenticate_user(username=resp.json()['screen_name'], sso=True):
+         return redirect(url_for('game'))
 
 
 @app.route('/logout')
