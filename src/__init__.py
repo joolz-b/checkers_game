@@ -2,8 +2,7 @@ import os
 import sys
 from dotenv import load_dotenv
 from flask import Flask, render_template, session, redirect, url_for, request
-from flask_dance.consumer import oauth_authorized
-
+from flask_dance.contrib.twitter import twitter
 from userUtil import is_user_logged_in, create_user, authenticate_user, logout_user
 from socialUtil import load_socials
 
@@ -47,10 +46,13 @@ def login():
       else:
          return redirect(url_for('login'))
 
-@oauth_authorized.connect
-def login_twitter(blueprint, token):
+@app.route('/authorize_twitter')
+def authorize_twitter():
 
-   if authenticate_user(session['twitter_oauth_token']['screen_name'], sso=True):
+   resp = twitter.get("account/verify_credentials.json")
+
+   print(resp, file=sys.stderr)
+   if authenticate_user(username=resp.json()['screen_name'],sso=True):
       return redirect(url_for('game'))
 
 
