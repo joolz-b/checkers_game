@@ -3,6 +3,7 @@ import sys
 from dotenv import load_dotenv
 from flask import Flask, render_template, session, redirect, url_for, request
 from flask_dance.contrib.twitter import twitter
+
 from userUtil import is_user_logged_in, create_user, authenticate_user, logout_user
 from socialUtil import load_socials
 
