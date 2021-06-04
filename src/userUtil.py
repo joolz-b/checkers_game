@@ -16,7 +16,7 @@ def authenticate_user(username=None, password=None, sso=False):
   res = False
 
   # check if account exists internally
-  sql = "SELECT username FROM users WHERE username=%s AND password=%s" % (username, password)
+  sql = "SELECT username FROM users WHERE username=%s AND password=%s;" % (username, password)
   user = get_query(sql)
 
   # user exists in the database

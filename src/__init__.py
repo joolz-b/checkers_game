@@ -95,8 +95,9 @@ def signup():
    elif request.method == 'POST':
 
       # todo: validate and check if user exists, if not, create the user
-      if request.form['password'] == request.form['password_confirm']:
-         create_user(request.form['username'], request.form['password'])
+      if request.form['password'] == request.form['password-confirm']:
+         create_user(request.form['username'], request.form['email'], request.form['password'])
+         return redirect(url_for('login'))
 
 
 if __name__ == '__main__':
