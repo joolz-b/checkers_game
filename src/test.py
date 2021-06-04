@@ -2,11 +2,11 @@ from Board import Board
 from GamePiece import GamePiece
 
 pieces = []
-pieces.append(GamePiece((1,5), 1, True))
-pieces.append(GamePiece((1,1), 1, False))
-pieces.append(GamePiece((3,1), 1, False))
-pieces.append(GamePiece((4,0), 2, False))
-pieces.append(GamePiece((4,4), 2, False))
+pieces.append({"position_x":1, "position_y":5, "team":1, "king": True})
+pieces.append({"position_x":1, "position_y":1, "team":1, "king": False})
+pieces.append({"position_x":3, "position_y":1, "team":1, "king": False})
+pieces.append({"position_x":4, "position_y":0, "team":2, "king": False})
+pieces.append({"position_x":4, "position_y":4, "team":2, "king": False})
 board = Board(6, pieces)
 
 print(board)
