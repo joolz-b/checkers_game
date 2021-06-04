@@ -8,7 +8,11 @@
 {% endblock %}
 
 {% block content %}
-  
+  {% if error %}
+  <pre class='error container align-middle text-center'>
+    {{ error }}
+  </pre>
+  {% endif %}
   <div class='container login-body'>
     <h1 class='display-6'>Login</h1>
     <form action='' method='POST'>

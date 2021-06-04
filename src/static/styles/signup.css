@@ -8,3 +8,7 @@
   display: inline-block;
   text-underline-offset: .25em;
 }
+
+.error {
+  color: rgb(218, 90, 90);
+}

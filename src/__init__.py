@@ -6,6 +6,7 @@ from flask_dance.contrib.twitter import twitter
 
 from userUtil import is_user_logged_in, create_user, authenticate_user, logout_user
 from socialUtil import load_socials
+from databaseUtil import run_query, get_query
 
 app = Flask(__name__)
 load_dotenv()
@@ -45,7 +46,7 @@ def login():
 
       # todo: if it doesn't exist, redirect back to login page with errors
       else:
-         return redirect(url_for('login'))
+         return render_template('login.html', twitter_login=url_for('twitter.login'), facebook_login=url_for('facebook.login'), error="Username or password invalid")
 
 @app.route('/authorize')
 def authorize():
@@ -76,10 +77,17 @@ def signup():
 
    elif request.method == 'POST':
 
-      # todo: validate and check if user exists, if not, create the user
-      if request.form['password'] == request.form['password-confirm']:
-         create_user(request.form['username'], request.form['email'], request.form['password'])
-         return redirect(url_for('login'))
+      # check if account exists internally
+      sql = "SELECT email FROM users WHERE email='"+request.form['email']+"'" 
+      user = get_query(sql)
+
+      # if no user account exists, make sure the passwords match, then create it
+      if not user:
+         if request.form['password'] == request.form['password-confirm']:
+            create_user(request.form['username'], request.form['email'], request.form['password'])
+            return redirect(url_for('login'))
+
+      return render_template('signup.html', error='Account already exists for this email, or passwords do not match')
 
 
 if __name__ == '__main__':

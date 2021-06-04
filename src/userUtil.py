@@ -1,5 +1,4 @@
 from flask import session
-import pymysql
 from databaseUtil import run_query, get_query
 import sys
 
@@ -25,8 +24,8 @@ def authenticate_user(username=None, password=None, sso=False):
     session['username'] = user[0][0]
     res = True
 
-  # if internal account, but sso is used, create it
-  if sso and user == None:
+  # if no internal account exists, but sso is used, create it
+  if sso and not user:
     create_user(username, 'email@email.com', 'some random string')
     session['username'] = username
     res = True
