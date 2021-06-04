@@ -66,6 +66,7 @@ def login():
       else:
          return render_template('login.html', twitter_login=url_for('twitter.login'), facebook_login=url_for('facebook.login'), error="Username or password invalid")
 
+# after SSO is used, get the credentials
 @app.route('/authorize')
 def authorize():
 
@@ -104,8 +105,10 @@ def signup():
          if request.form['password'] == request.form['password-confirm']:
             create_user(request.form['username'], request.form['email'], request.form['password'])
             return redirect(url_for('login'))
+         else:
+            return render_template('signup.html', error='Passwords do not match')
 
-      return render_template('signup.html', error='Account already exists for this email, or passwords do not match')
+      return render_template('signup.html', error='Account already exists for this email')
 
 
 if __name__ == '__main__':
