@@ -1,8 +1,10 @@
 {
-    "gameID": "1",
+    "game_ID": 1,
     "dimension": 8,
-    "currentTurn": 2,
-    "finished":false,
+    "current_turn": 2,
+    "winner":1,
+    "player_1":"player1@email.com",
+    "player_2":"player2@email.com",
     "pieces": [
         {
             "position_x": 1,
@@ -14,7 +16,7 @@
             "position_x": 4,
             "position_y": 4,
             "king": true,
-            "team": 2
+            "team": 1
         }
     ]
 }

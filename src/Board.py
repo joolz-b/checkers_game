@@ -2,11 +2,15 @@ from GamePiece import GamePiece
 
 class Board:
     # Can provide a 2D array of pieces to load an existing board, else, it will load a starting board based on the dimensions
-    def __init__(self, dimension, pieces = None):
+    def __init__(self, game_ID, dimension, player_1, player_2, pieces = None, current_turn = 1):
         self.dimension = dimension
         self.team_1 = []
         self.team_2 = []
+        self.game_ID = game_ID
         self.positions = [[]]*dimension
+        self.current_turn = current_turn
+        self.player_1 = player_1
+        self.player_2 = player_2
         for i in range(dimension):
             self.positions[i] = [None] * dimension
         if not pieces:
@@ -44,6 +48,8 @@ class Board:
                 pos = pieceLoaded.getPos()
                 self.positions[pos[0]][pos[1]] = pieceLoaded
 
+    def getGame_ID(self):
+        return self.game_ID
 
     def getDimension(self):
         return self.dimension
@@ -51,7 +57,17 @@ class Board:
     def getNumPieces(self):
         return self.numPieces
 
-    def checkMoveLegal(self, pos, movePos, team):
+    def getCurrentTurn(self):
+        return self.current_turn
+    
+    def getPlayer1(self):
+        return self.player_1
+
+    def getPlayer2(self):
+        return self.player_2
+
+    def checkMoveLegal(self, pos, movePos):
+        team = self.current_turn
         moveLegal = True
         if self.checkMovePossible(pos, movePos, team) == False:
             moveLegal = False
@@ -60,9 +76,11 @@ class Board:
                 moveLegal = False
         return moveLegal
     
-    def movePiece(self, pos, movePos, team):
-        makeAnotherMove = False
-        if self.checkMoveLegal(pos, movePos, team):
+    # Will return the player whose move it is
+    def movePiece(self, pos, movePos):
+        team = self.current_turn
+        makeAnotherMove = True
+        if self.checkMoveLegal(pos, movePos):
             piece = self.positions[pos[0]][pos[1]]
             piece.setPos(movePos)
             self.positions[movePos[0]][movePos[1]] = piece
@@ -77,9 +95,25 @@ class Board:
                 self.removeJumpedPiece(pos, movePos)
                 if self.checkJumpAvailable(team):
                     makeAnotherMove = True
+                else:
+                    makeAnotherMove = False
+            else:
+                makeAnotherMove = False
         else:
-            print("Something went wrong, this is not a legal move")
-        return makeAnotherMove
+            print("This is not a legal move")
+        if makeAnotherMove:
+            team = team
+            self.current_turn = team
+        else:
+            team = self.getNextTurn(team)
+            self.current_turn = team
+        return team
+        
+    def getNextTurn(self, team):
+        if team == 1:
+            return 2
+        else:
+            return 1
 
     # Returns 0 if game isn't over. Else returns winning team.
     def checkWinner(self):
@@ -98,15 +132,28 @@ class Board:
             pieceDict['position_y'] = piece.getPos()[1]
             pieceDict['team'] = piece.getTeam()
             pieceDict['king'] = piece.isKing()
-            pieces.append(piece)
+            pieces.append(pieceDict)
         for piece in self.team_2:
             pieceDict = {}
             pieceDict['position_x'] = piece.getPos()[0]
             pieceDict['position_y'] = piece.getPos()[1]
             pieceDict['team'] = piece.getTeam()
             pieceDict['king'] = piece.isKing()
-            pieces.append(piece)
+            pieces.append(pieceDict)
         return pieces
+
+    def exportGame(self):
+        game = {
+                "game_ID": self.game_ID,
+                "dimension": self.dimension,
+                "current_turn": self.current_turn,
+                "winner":self.checkWinner(),
+                "player_1":self.player_1,
+                "player_2":self.player_2,
+                "pieces": self.exportPieces()
+        }
+        return game
+
 
     # For troubleshooting
     def __str__(self):
