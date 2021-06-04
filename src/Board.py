@@ -66,6 +66,12 @@ class Board:
     def getPlayer2(self):
         return self.player_2
 
+    def getPos(self, pos):
+        pieceToReturn = None
+        if pos[0] > 0 and pos[1] > 0 and pos[0] < self.dimension and pos[1] < self.dimension:
+            pieceToReturn = self.positions[pos[0]][pos[1]]
+        return pieceToReturn
+
     def checkMoveLegal(self, pos, movePos):
         team = self.current_turn
         moveLegal = True
