@@ -23,12 +23,12 @@ def authenticate_user(username=None, password=None, sso=False):
     sql = "SELECT username FROM users WHERE username='"+username+"'"
   user = get_query(sql)
 
-  # user exists in the database
+  # account exists in the database
   if user:
     session['username'] = user[0][0]
     res = True
 
-  # if no internal account exists, but sso is used, create it
+  # if no account exists, but sso is used, create it
   if sso and not user:
     create_user(username, 'email@email.com', ''.join(random.choices(string.ascii_uppercase + string.digits, k=16)))
     session['username'] = username

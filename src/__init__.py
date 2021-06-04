@@ -89,8 +89,8 @@ def signup():
             return redirect(url_for('login'))
          else:
             return render_template('signup.html', error='Passwords do not match')
-
-      return render_template('signup.html', error='Account already exists for this email')
+      else:
+         return render_template('signup.html', error='Account already exists for this email')
 
 
 if __name__ == '__main__':
