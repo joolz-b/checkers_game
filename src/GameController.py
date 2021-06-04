@@ -3,6 +3,27 @@ from Board import Board
 import boto3
 from botocore.exceptions import ClientError
 
+#Use this probably
+def check_game_exists(player_1_email, player_2_email, dynamoClient=None):
+    if not dynamoClient:
+       dynamoClient = boto3.client("dynamodb",
+                              aws_access_key_id=get_secret("access_key_id"),
+                              aws_secret_access_key=get_secret(
+                                  "access_key_secret"),
+                              region_name="us-east-1"
+                              )
+    games_table = get_games_table()
+    game_ID = get_game_ID(player_1_email, player_2_email)
+    try:
+        response = games_table.get_item(Key={'game_ID': game_ID})
+        user = response.get('Item')
+    except dynamoClient.exceptions.ClientError as e:
+        user = None
+    exists = False
+    if user:
+        exists= True
+    return exists
+
 #Use this
 def load_board(player_1, player_2, dynamoClient=None, dynamoResource=None):
     game_ID = get_game_ID(player_1, player_2)
@@ -19,8 +40,10 @@ def load_board(player_1, player_2, dynamoClient=None, dynamoResource=None):
     board = Board(game_dict['game_ID'], int(game_dict['dimension']), game_dict['player_1'],game_dict['player_2'], pieces, int(game_dict['current_turn']))
     return board
 
-#Use this
+#Use this - Note: It will delete the existing game if it exists.
 def create_board(player_1, player_2, dimension):
+    if check_game_exists(player_1, player_2):
+        delete_game(player_1, player_2)
     game_ID = get_game_ID(player_1, player_2)
     board = Board(game_ID, dimension, player_1, player_2)
     item=board.exportGame()
@@ -140,3 +163,23 @@ def delete_game(player_1_email, player_2_email):
             raise
     else:
         return response
+
+def check_game_exists(player_1_email, player_2_email, dynamoClient=None):
+    if not dynamoClient:
+       dynamoClient = boto3.client("dynamodb",
+                              aws_access_key_id=get_secret("access_key_id"),
+                              aws_secret_access_key=get_secret(
+                                  "access_key_secret"),
+                              region_name="us-east-1"
+                              )
+    games_table = get_games_table()
+    game_ID = get_game_ID(player_1_email, player_2_email)
+    try:
+        response = games_table.get_item(Key={'game_ID': game_ID})
+        user = response.get('Item')
+    except dynamoClient.exceptions.ClientError as e:
+        user = None
+    exists = False
+    if user:
+        exists= True
+    return exists
