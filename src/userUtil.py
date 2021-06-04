@@ -1,6 +1,7 @@
 from flask import session
 import pymysql
 from databaseUtil import run_query, get_query
+import sys
 
 def is_user_logged_in():
   res = False
@@ -16,12 +17,12 @@ def authenticate_user(username=None, password=None, sso=False):
   res = False
 
   # check if account exists internally
-  sql = "SELECT username FROM users WHERE username=%s AND password=%s;" % (username, password)
+  sql = "SELECT username FROM users WHERE username='"+username+"' AND password='"+password+"'" 
   user = get_query(sql)
 
   # user exists in the database
-  if user != None:
-    session['username'] = username
+  if user:
+    session['username'] = user[0][0]
     res = True
 
   # if internal account, but sso is used, create it
