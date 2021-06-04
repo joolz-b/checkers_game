@@ -1,6 +1,6 @@
 from flask import session
 from databaseUtil import run_query, get_query
-import sys
+import sys, random, string
 
 def is_user_logged_in():
   res = False
@@ -16,7 +16,11 @@ def authenticate_user(username=None, password=None, sso=False):
   res = False
 
   # check if account exists internally
-  sql = "SELECT username FROM users WHERE username='"+username+"' AND password='"+password+"'" 
+  sql = ''
+  if not sso:
+    sql = "SELECT username FROM users WHERE username='"+username+"' AND password='"+password+"'" 
+  else:
+    sql = "SELECT username FROM users WHERE username='"+username+"'"
   user = get_query(sql)
 
   # user exists in the database
@@ -26,7 +30,7 @@ def authenticate_user(username=None, password=None, sso=False):
 
   # if no internal account exists, but sso is used, create it
   if sso and not user:
-    create_user(username, 'email@email.com', 'some random string')
+    create_user(username, 'email@email.com', ''.join(random.choices(string.ascii_uppercase + string.digits, k=16)))
     session['username'] = username
     res = True
   
