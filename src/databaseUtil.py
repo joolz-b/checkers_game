@@ -12,7 +12,7 @@ def create_database():
 
 
 # creates the tables
-def create_table():
+def create_tables():
   run_query('''
       create table users (
         id int not null auto_increment,
