@@ -21,5 +21,7 @@
     <!-- 'Your move', 'Victory/Defeat', etc -->
   </div>
 {% endblock %}
-
+{% block scripts %}
+  <script src="{{url_for('static', filename='scripts/game.js')}}"></script>
+{% endblock %}
 </html>
