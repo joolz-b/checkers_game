@@ -8,11 +8,12 @@ def is_user_logged_in():
 
   return res
 
-def authenticate_user(username, password):
+# users can either login via internal accounts or external (facebook, twitter)
+def authenticate_user(username=None, password=None, sso=False):
 
   res = False
   # todo
-  if True:
+  if True or sso:
     session['username'] = username
     res = True
 
