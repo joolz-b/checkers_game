@@ -1,4 +1,4 @@
-from GameController import load_board, create_board, update_board, delete_game
+from GameController import load_board_from_players, create_board, update_board, delete_game
 from Board import Board
 
 pieces = []
@@ -21,15 +21,15 @@ print(board)
 current_team = board.movePiece((1,1), (2,0))
 print(board)
 update_board(board)
-board = load_board(player_1_email, player_2_email)
+board = load_board_from_players(player_1_email, player_2_email)
 print(board)
 current_team = board.movePiece((4,2), (3,1))
 update_board(board)
-board = load_board(player_1_email, player_2_email)
+board = load_board_from_players(player_1_email, player_2_email)
 print(board)
 current_team = board.movePiece((2,0), (4,2))
 update_board(board)
-board = load_board(player_1_email, player_2_email)
+board = load_board_from_players(player_1_email, player_2_email)
 print(board)
 
 delete_game(player_1_email, player_2_email)

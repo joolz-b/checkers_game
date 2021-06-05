@@ -1,5 +1,6 @@
 from flask import Flask, render_template, session, redirect, url_for, request
 from userUtil import is_user_logged_in, create_user, authenticate_user, logout_user
+from GameController import is_user_in_game, load_board_from_ID
 
 app = Flask(__name__, template_folder='templates')
 app.secret_key = 'super secret key :)'
@@ -10,11 +11,28 @@ def index():
    return render_template('index.html')
 
 # displays the actual game board
-@app.route('/game')
-def game():
+@app.route('/game/<game_ID>', methods=['POST', 'GET'])
+def game(game_ID):
    
    if is_user_logged_in():
-      return render_template('game.html')
+      if is_user_in_game(game_ID, session['username']):
+         board = load_board_from_ID(game_ID)
+         if request.method == 'POST':
+            ## Make move (excuse my inconsistent casing): 
+            # board.movePiece(pos_tuple, move_pos_tuple) 
+            ## update database
+            # update_board(board)
+            pass
+         ## We will want to know if it is the user's turn. 
+         # board.getCurrentTurn()
+         ## We will want to know if there is a winner.
+         ## return 0 if none, 1 if 1, 2 if 2... obvs 
+         # winner = board.checkWinner()
+         ## Get username:
+         # board.getPlayer1()
+         return render_template('game.html')
+      else:
+         return redirect(url_for('index'))
 
    else:
       return redirect(url_for('login'))
