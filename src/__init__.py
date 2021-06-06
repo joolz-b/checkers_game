@@ -116,9 +116,9 @@ if __name__ == '__main__':
    app.debug = True
 
    # production programs
-   # if(not app.debug):
-   create_database()
-   create_tables()
-   download_assets()
+   if(not app.debug):
+      create_database()
+      create_tables()
+      download_assets()
 
    app.run()

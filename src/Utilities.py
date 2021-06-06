@@ -86,7 +86,6 @@ def download_assets():
     aws_secret_access_key=os.environ.get('AWS_SECRET_ACCESS_KEY'), 
     region_name=os.environ.get('AWS_REGION')
   )
-
   
   s3.download_file('checkers-game-cc-sem1', 'cell_light.png', 'cell_light.png')
   s3.download_file('checkers-game-cc-sem1', 'cell_dark.png', 'cell_dark.png')
