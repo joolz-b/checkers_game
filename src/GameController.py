@@ -1,6 +1,7 @@
-from secrets import get_secret
+from customSecrets import get_secret
 from Board import Board
 import boto3
+from boto3.dynamodb.conditions import Attr
 from botocore.exceptions import ClientError
 
 #Use this probably
@@ -181,3 +182,23 @@ def check_game_exists(game_ID, dynamoClient=None):
         exists= True
     return exists
 
+def scan_games_eq(attribute, value):
+    games = []
+
+    table = get_games_table()
+    scan_kwargs = {
+        'FilterExpression': Attr(attribute).eq(value)
+    }
+
+    done = False
+    start_key = None
+    while not done:
+        if start_key:
+            scan_kwargs['ExclusiveStartKey'] = start_key
+        response = table.scan(**scan_kwargs)
+        game_page = response.get('Items', None)
+        for game in game_page:
+            games.append(game)
+        start_key = response.get('LastEvaluatedKey', None)
+        done = start_key is None
+    return games
