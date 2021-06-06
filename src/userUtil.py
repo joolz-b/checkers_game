@@ -10,6 +10,21 @@ def is_user_logged_in():
 
   return res
 
+def find_other_users(current_user, username_email_contains):
+  matches = []
+  result = get_query(f"select username FROM users where UPPER(username) LIKE(UPPER('%{username_email_contains}%')) OR email LIKE(UPPER('%{username_email_contains}%'))")
+  for record in result:
+    if record[0] != current_user:
+      matches.append(record[0])
+  return matches
+
+def confirm_user_exists(username):
+  result = get_query(f"select username FROM users where username = '{username}'")
+  exists = False
+  if result:
+    exists = True
+  return exists
+
 # users can either login via internal accounts or external (facebook, twitter)
 def authenticate_user(username=None, password=None, sso=False):
 
