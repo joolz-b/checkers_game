@@ -60,7 +60,7 @@ def login():
 
       # validate and check if the user exists
       if authenticate_user(request.form['username'], request.form['password']):
-         return redirect(url_for('game'))
+         return redirect(url_for('tutorial'))
 
       # todo: if it doesn't exist, redirect back to login page with errors
       else:
