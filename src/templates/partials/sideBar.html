@@ -4,6 +4,7 @@
     <a href="/game">Play</a>
 
     {% if(session['username']) %}
+    <a href='/home'></a>
     <a href='/logout'>Logout</a>
     {% else %}
     <a href='/login'>Login</a>

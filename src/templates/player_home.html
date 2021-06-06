@@ -1,0 +1,25 @@
+{% extends 'layout.html' %}
+
+
+
+{% block content %}
+<head>
+<h3>Welcome {{user_name}}!</h3><a href="/logout">LOG OUT</a></h3>
+</head>
+<body>
+<h2>Current Games</h2>
+    {% if games|length > 0 %}
+        {% for game in games %}
+        {% if game['player_1'] != user_name %}
+        <a href="/game/{{game['game_ID']}}">Game with {{game['player_1']}}</a>
+        {% else %}
+        <a href="/game/{{game['game_ID']}}">Game with {{game['player_2']}}</a>
+        {% endif %}
+        {% endfor %}
+    {% else %}
+        <p><h3>You don't currently have any games. Invite a user to a game below.</h3></p>
+    {% endif %}
+</body>
+{% endblock %}
+
+</html>

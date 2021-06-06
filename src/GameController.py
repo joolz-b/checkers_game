@@ -1,7 +1,7 @@
 from customSecrets import get_secret
 from Board import Board
 import boto3
-from boto3.dynamodb.conditions import Attr
+from boto3.dynamodb.conditions import Attr, Or
 from botocore.exceptions import ClientError
 
 #Use this probably
@@ -10,7 +10,7 @@ def check_game_exists_with_players(player_1_email, player_2_email):
     return check_game_exists(game_ID)
 
 #Use this
-def is_user_in_game(username, game_ID):
+def is_user_in_game(game_ID, username):
     inGame = False
     board = load_board_from_ID(game_ID)
     if board and (board.getPlayer1() == username or board.getPlayer2() == username):
@@ -182,12 +182,12 @@ def check_game_exists(game_ID, dynamoClient=None):
         exists= True
     return exists
 
-def scan_games_eq(attribute, value):
+def scan_users_games(username):
     games = []
 
     table = get_games_table()
     scan_kwargs = {
-        'FilterExpression': Attr(attribute).eq(value)
+        'FilterExpression': Or(Attr('player_1').eq(username), Attr('player_2').eq(username))
     }
 
     done = False

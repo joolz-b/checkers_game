@@ -5,7 +5,7 @@ from flask import Flask, render_template, session, redirect, url_for, request
 from flask_dance.contrib.twitter import twitter
 
 from userUtil import is_user_logged_in, create_user, authenticate_user, logout_user
-from GameController import is_user_in_game, load_board_from_ID
+from GameController import is_user_in_game, load_board_from_ID, scan_users_games
 from socialUtil import load_socials
 from databaseUtil import run_query, get_query
 
@@ -16,14 +16,16 @@ load_socials(app)
 @app.route('/')
 def index():
    print(session, file=sys.stderr)
-   return render_template('index.html')
+   if is_user_logged_in():
+      return redirect(url_for('home'))
+   else:
+      return render_template('index.html')
 
 # displays the actual game board
 @app.route('/game/<game_ID>', methods=['POST', 'GET'])
 def game(game_ID):
-   
    if is_user_logged_in():
-      if is_user_in_game(game_ID, session['username']):
+      if is_user_in_game(int(game_ID), session['username']):
          board = load_board_from_ID(game_ID)
          if request.method == 'POST':
             ## Make move (excuse my inconsistent casing): 
@@ -44,7 +46,17 @@ def game(game_ID):
 
    else:
       return redirect(url_for('login'))
-      
+
+@app.route('/home', methods=['GET'])
+def home():
+   if is_user_logged_in():
+      if request.method == 'GET':
+         games = scan_users_games(session['username'])
+         query = None
+         return render_template('player_home.html', user_name=session['username'], games=games)
+   else:
+      return redirect(url_for('index'))
+
 # information on how to play the game
 @app.route('/tutorial')
 def tutorial():
@@ -60,7 +72,7 @@ def login():
 
       # validate and check if the user exists
       if authenticate_user(request.form['username'], request.form['password']):
-         return redirect(url_for('tutorial'))
+         return redirect(url_for('home'))
 
       # todo: if it doesn't exist, redirect back to login page with errors
       else:
@@ -79,7 +91,7 @@ def authorize():
    # twitter login
    else:
       if authenticate_user(username=resp.json()['screen_name'], sso=True):
-         return redirect(url_for('game'))
+         return redirect(url_for('home'))
 
 
 @app.route('/logout')
