@@ -11,13 +11,35 @@
     {% if games|length > 0 %}
         {% for game in games %}
         {% if game['player_1'] != user_name %}
-        <a href="/game/{{game['game_ID']}}">Game with {{game['player_1']}}</a>
+        <p><a href="/game/{{game['game_ID']}}">Game with {{game['player_1']}}</a></p>
         {% else %}
-        <a href="/game/{{game['game_ID']}}">Game with {{game['player_2']}}</a>
+        <p><a href="/game/{{game['game_ID']}}">Game with {{game['player_2']}}</a></p>
         {% endif %}
         {% endfor %}
     {% else %}
         <p><h3>You don't currently have any games. Invite a user to a game below.</h3></p>
+    {% endif %}
+    <h2>Opponents</h2>
+    <form action="/home" method="POST">
+        <p>
+            <input type="submit" value="Search for Opponents"/><input type="text" id="user_search" name="user_search">
+        </p>
+    </form>
+    {% if results != None %}
+        {% if results|length > 0 %}
+        <table style = "border-collapse: collapse; border: 1px solid black; padding: 4px;">
+            <tr>
+                <th style = "border-collapse: collapse; border: 1px solid black; padding: 4px;">Users Matching Your Query</th>
+            </tr>
+            {% for user in results %}
+            <tr>
+                <td style = "border-collapse: collapse; border: 1px solid black; padding: 4px;"><a href="/invite/{{user}}">{{user}}</a></td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% else %}
+            <p>No users matched your search</p>
+        {% endif %}
     {% endif %}
 </body>
 {% endblock %}
