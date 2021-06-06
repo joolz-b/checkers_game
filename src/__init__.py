@@ -7,7 +7,7 @@ from flask_dance.contrib.twitter import twitter
 from userUtil import is_user_logged_in, create_user, authenticate_user, logout_user
 from GameController import is_user_in_game, load_board_from_ID
 from socialUtil import load_socials
-from databaseUtil import run_query, get_query
+from Utilities import run_query, get_query, create_database, create_tables, download_assets
 
 app = Flask(__name__)
 load_dotenv()
@@ -112,5 +112,13 @@ def signup():
 
 
 if __name__ == '__main__':
+
    app.debug = True
+
+   # production programs
+   # if(not app.debug):
+   create_database()
+   create_tables()
+   download_assets()
+
    app.run()
