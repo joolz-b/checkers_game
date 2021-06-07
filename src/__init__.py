@@ -4,11 +4,13 @@ from dotenv import load_dotenv
 from flask import Flask, render_template, session, redirect, url_for, request
 from flask_dance.contrib.twitter import twitter
 
-from userUtil import is_user_logged_in, create_user, authenticate_user, logout_user, find_other_users, confirm_user_exists
-from GameController import is_user_in_game, load_board_from_ID, scan_users_games, create_board
+from userUtil import is_user_logged_in, create_user, authenticate_user, logout_user, find_other_users, confirm_user_exists, get_email_from_username
+from GameController import is_user_in_game, load_board_from_ID, scan_users_games, create_board, delete_game_ID
+from invites_controller import add_to_invite_list, load_player_invites, delete_from_invite_list
 from socialUtil import load_socials
 from databaseUtil import run_query, get_query
 from Board import Board
+from email_controller import send_email_invite
 
 DEFAULT_BOARD_DIMENSION = 8
 
@@ -54,15 +56,16 @@ def game(game_ID):
 def home():
    if is_user_logged_in():
       games = scan_users_games(session['username'])
+      invites = load_player_invites(session['username'])
       if request.method == 'GET':
          query = None
-         return render_template('player_home.html', user_name=session['username'], games=games, results = None)
+         return render_template('player_home.html', user_name=session['username'], games=games, invites= invites, results = None)
       elif request.method == 'POST':
          form = request.form
          results = find_other_users(session['username'], form['user_search'])
-         return render_template('player_home.html', user_name=session['username'], games=games, results = results)
+         return render_template('player_home.html', user_name=session['username'], games=games, invites= invites, results = results)
    else:
-      return redirect(url_for('index'))
+      return redirect(url_for('login'))
 
 # information on how to play the game
 @app.route('/tutorial')
@@ -129,16 +132,42 @@ def signup():
       else:
          return render_template('signup.html', error='Account already exists for this email')
 
-@app.route('/invite/<username>')
+@app.route('/invite/send/<username>')
 def invite(username):
    if is_user_logged_in():
       if confirm_user_exists(username) and username != session['username']:
+         add_to_invite_list(username, session['username'])
+         email = get_email_from_username(username)
+         send_email_invite(email, session['username'], url_for('home'))
+      return redirect(url_for('home'))
+   else:
+      return redirect(url_for('index'))
+
+@app.route('/invite/accept/<username>')
+def accept(username):
+   if is_user_logged_in():
+      if confirm_user_exists(username) and username != session['username'] and username in load_player_invites(session['username']):
+         delete_from_invite_list(session['username'], username)
          board = create_board(session['username'], username, DEFAULT_BOARD_DIMENSION)
          return redirect(url_for('game', game_ID=board.getGame_ID()))
       else:
          return redirect(url_for('home'))
    else:
-      return redirect(url_for('index'))
+      return redirect(url_for('login'))
+
+@app.route('/concede/<game_ID>')
+def concede(game_ID):
+   if is_user_logged_in():
+      try:
+         game_int = int(game_ID)
+         if is_user_in_game(game_int, session['username']):
+            delete_game_ID(game_int)
+         return redirect(url_for('home'))
+      except ValueError:
+         return redirect(url_for('home'))
+   else:
+      return redirect(url_for('login'))
+   
 
 if __name__ == '__main__':
    app.debug = True

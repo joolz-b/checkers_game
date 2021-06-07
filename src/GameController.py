@@ -151,6 +151,9 @@ def get_games_table(dynamoClient = None, dynamoResource=None):
 
 def delete_game(player_1_email, player_2_email):
     game_ID = get_game_ID(player_1_email, player_2_email)
+    delete_game_ID(game_ID)
+
+def delete_game_ID(game_ID):
     table = get_games_table()
     try:
         response = table.delete_item(
