@@ -10,7 +10,7 @@ pieces.append({"position_x":4, "position_y":4, "team":2, "king": False})
 # board = Board(6, pieces)
 
 current_team = 2
-player_1_email = "player1@email.com"
+player_1_email = "testUser@test.com"
 player_2_email = "player2@email.com"
 dimension = 6
 

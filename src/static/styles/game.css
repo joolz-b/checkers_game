@@ -5,6 +5,10 @@
   align-items: center;
 }
 
+.game-status {
+  margin: 1em;
+}
+
 .loader {
   border: .2em solid #f3f3f3; /* Light grey */
   border-top: .2em solid #3498db; /* Blue */

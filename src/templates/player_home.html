@@ -1,0 +1,48 @@
+{% extends 'layout.html' %}
+
+{% block title %}Checkers, in the Cloud{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{{url_for('static', filename='styles/home.css')}}">
+{% endblock %}
+
+{% block content %}
+<div class='container player-home-body'>
+    <h3 class='text-center align-middle display-6'>Welcome {{user_name}}!</h3>
+    <a class='text-center align-middle btn btn-primary' href="/logout">LOG OUT</a>
+    <h2>Current Games</h2>
+    {% if games|length > 0 %}
+        {% for game in games %}
+        {% if game['player_1'] != user_name %}
+        <p><a href="/game/{{game['game_ID']}}">Game with {{game['player_1']}}</a></p>
+        {% else %}
+        <p><a href="/game/{{game['game_ID']}}">Game with {{game['player_2']}}</a></p>
+        {% endif %}
+        {% endfor %}
+    {% else %}
+        <p><h3>You don't currently have any games. Invite a user to a game below.</h3></p>
+    {% endif %}
+    <h2>Opponents</h2>
+    <form action="/home" method="POST">
+        <p>
+            <input type="submit" value="Search for Opponents"/><input type="text" id="user_search" name="user_search">
+        </p>
+    </form>
+    {% if results != None %}
+        {% if results|length > 0 %}
+        <table style = "border-collapse: collapse; border: 1px solid black; padding: 4px;">
+            <tr>
+                <th style = "border-collapse: collapse; border: 1px solid black; padding: 4px;">Users Matching Your Query</th>
+            </tr>
+            {% for user in results %}
+            <tr>
+                <td style = "border-collapse: collapse; border: 1px solid black; padding: 4px;"><a href="/invite/{{user}}">{{user}}</a></td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% else %}
+            <p>No users matched your search</p>
+        {% endif %}
+    {% endif %}
+</div>
+{% endblock %}

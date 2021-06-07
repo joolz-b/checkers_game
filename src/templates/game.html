@@ -18,7 +18,19 @@
     {% include 'partials/gameBoard.html' %}
   </div>
   <div class="game-status container text-center align-middle">
-    <!-- 'Your move', 'Victory/Defeat', etc -->
+    <p id='game-status-piece'></p>
+    <p id='game-status-cell'></p>
+  </div>
+
+  <!-- State to pass onto javascript -->
+  <div class='board-info text-center align-middle'>
+    <pre>
+      {% if board %}
+        <div id='board-current-turn'>{{ board.getCurrentTurn() }}</div>
+        <div id='board-player-1'>{{ board.getPlayer1() }}</div>
+        <div id='board-player-2'>{{ board.getPlayer2() }}</div>
+      {% endif %}
+    </pre>
   </div>
 {% endblock %}
 {% block scripts %}
