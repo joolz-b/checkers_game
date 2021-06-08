@@ -13,7 +13,7 @@
    <!-- State to pass onto javascript -->
   {% if board %}
     <div class='text-center align-middle'>
-      <p class='display-6'>
+      <p id='banner' class='display-6'>
         {%- if board.getCurrentTurn() == 1 %}
           {%- if board.getPlayer1() == session['username'] %}
             Your turn {{ session['username'] }}! Make a move.

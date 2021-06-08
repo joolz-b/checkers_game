@@ -1,6 +1,7 @@
 
 var selectedPiece = null
 var selectedCell = null
+var refresh = null
 
 function selectCell(pos) {
 
@@ -82,7 +83,8 @@ function checkWinner() {
     if (request.readyState == XMLHttpRequest.DONE) {
   
       if(request.responseText.localeCompare('FALSE') != 0) {
-        document.getElementById('').innerHTML = request.responseText
+        document.getElementById('banner').innerHTML = request.responseText
+        clearTimeout(refresh)
       }
       else {
         console.log('No winner yet for this game...')
@@ -93,14 +95,17 @@ function checkWinner() {
   request.send()
 }
 
-window.onload = function() {
-
+function setRefreshPage() {
   if(document.getElementById("game-status-current-turn").innerHTML.trim().localeCompare('false') == 0) {
-    setInterval(()=>{
+    refresh = setInterval(()=>{
       location.reload()
     }, 20000)
   }
+}
 
+window.onload = function() {
+
+  setRefreshPage()
   checkWinner()
 
 }
