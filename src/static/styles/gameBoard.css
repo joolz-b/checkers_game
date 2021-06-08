@@ -12,6 +12,14 @@
   background-image: url("../images/cell_dark.png");
 }
 
+.king-light {
+
+}
+
+.king-dark {
+  
+}
+
 .blank-cell {
   display: none;
 }

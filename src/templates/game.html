@@ -10,28 +10,43 @@
 {% endblock %}
 
 {% block content %}
-  <div class='game-info container text-center align-middle'>
-    <p>Waiting for an opponent</p>
-    <div class='loader'></div>
-  </div>
+   <!-- State to pass onto javascript -->
+  {% if board %}
+    <div class='text-center align-middle'>
+      <p class='display-6'>
+        {%- if board.getCurrentTurn() == 1 %}
+          {%- if board.getPlayer1() == session['username'] %}
+            Your turn {{ session['username'] }}! Make a move.
+          {%- else %}
+            Awaiting opponent's turn.
+          {%- endif %}
+        {%- else %}
+          {%- if board.getPlayer2() == session['username'] %}
+            Your turn {{ session['username'] }}! Make a move.
+          {%- else %}
+            Awaiting opponent's turn.
+          {%- endif %}
+        {%- endif %}
+      </p>
+      <p class='lead'>{{board.getPlayer1()}} as Dark, {{board.getPlayer2()}} as Light</p>
+    </div>
+  {% endif %}
   <div class="container text-center align-middle game-body">
     {% include 'partials/gameBoard.html' %}
   </div>
   <div class="game-status container text-center align-middle">
     <p id='game-status-piece'></p>
     <p id='game-status-cell'></p>
+    <p id='game-status-current-turn'>
+      {%- if board.getCurrentTurn() == team %}
+      true
+      {%- else %}
+      false
+      {%- endif %}
+    </p>
   </div>
 
-  <!-- State to pass onto javascript -->
-  <div class='board-info text-center align-middle'>
-    <pre>
-      {% if board %}
-        <div id='board-current-turn'>{{ board.getCurrentTurn() }}</div>
-        <div id='board-player-1'>{{ board.getPlayer1() }}</div>
-        <div id='board-player-2'>{{ board.getPlayer2() }}</div>
-      {% endif %}
-    </pre>
-  </div>
+ 
 {% endblock %}
 {% block scripts %}
   <script src="{{url_for('static', filename='scripts/game.js')}}"></script>

@@ -1,9 +1,6 @@
 
 var selectedPiece = null
 var selectedCell = null
-var current_turn = null
-var player_1 = null
-var player_2 = null
 
 function selectCell(pos) {
 
@@ -40,23 +37,70 @@ function selectPiece(pos) {
 // call backend endpoint here
 function movePiece() {
 
-  console.log('moving piece to cell ' + selectedCell.toString())
+  if(document.getElementById("game-status-current-turn").innerHTML.trim().localeCompare('true') == 0) {
+    console.log('moving piece to cell ' + selectedCell.toString())
 
+    let request = new XMLHttpRequest()
+    let game_id = window.location.href.split('/')
+    game_id = game_id[game_id.length - 1]
+
+    request.onreadystatechange = function() {
+      if (request.readyState == XMLHttpRequest.DONE) {
+        if(request.responseText.localeCompare('OK') == 0) {
+          location.reload()
+        }
+        else {
+          console.log(request.responseText)
+        }
+      }
+    }
+
+    request.open("GET", game_id.toString() + '/move?' 
+      + 'piece=' + selectedPiece.toString() 
+      + '&cell=' + selectedCell.toString()
+    )
+    request.send()
+
+    // reset selection
+    selectCell(null)
+    selectPiece(null)
+  }
+  else {
+    console.log('please wait for opponent to complete their turn.')
+  }
+
+  
+}
+
+// call after move function
+function checkWinner() {
   let request = new XMLHttpRequest()
   let game_id = window.location.href.split('/')
   game_id = game_id[game_id.length - 1]
-  console.log(game_id)
-  request.open("GET", game_id.toString() + '/move?' + 'piece=' + selectedPiece.toString() + '&cell=' + selectedCell.toString())
-  request.send()
 
-  // reset selection
-  selectCell(null)
-  selectPiece(null)
+  request.onreadystatechange = function() {
+    if (request.readyState == XMLHttpRequest.DONE) {
+  
+      if(request.responseText.localeCompare('FALSE') != 0) {
+        document.getElementById('').innerHTML = request.responseText
+      }
+      else {
+        console.log('No winner yet for this game...')
+      }
+    }
+  }
+  request.open("GET", game_id.toString() + '/check')
+  request.send()
 }
 
 window.onload = function() {
-  
-  current_turn = document.getElementById("board-current-turn").innerHTML
-  player_1 = document.getElementById("board-player-1").innerHTML
-  player_2 = document.getElementById("board-player-2").innerHTML
+
+  if(document.getElementById("game-status-current-turn").innerHTML.trim().localeCompare('false') == 0) {
+    setInterval(()=>{
+      location.reload()
+    }, 20000)
+  }
+
+  checkWinner()
+
 }
