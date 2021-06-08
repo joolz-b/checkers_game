@@ -32,9 +32,11 @@ def index():
 def game(game_ID):
    if is_user_logged_in():
       if is_user_in_game(int(game_ID), session['username']):
-         board = load_board_from_ID(game_ID)
-         # return render_template('game.html', board = board.exportGame())
-         return render_template('game.html')
+         board = load_board_from_ID(int(game_ID))
+         team = 1
+         if(board.getPlayer2() == session['username']):
+            team = 2
+         return render_template('game.html', board = board, team = team)
       else:
          return redirect(url_for('index'))
 
@@ -44,7 +46,7 @@ def game(game_ID):
 @app.route('/game/<game_ID>/<cmd>')
 def command(game_ID, cmd):
 
-   board = load_board_from_ID(game_ID)
+   board = load_board_from_ID(int(game_ID))
 
    ## We will want to know if it is the user's turn. 
    # board.getCurrentTurn()
@@ -55,17 +57,41 @@ def command(game_ID, cmd):
    # board.getPlayer1()
 
    if(cmd == 'move'):
-      piece = request.args.get('piece', None)
-      cell = request.args.get('cell', None)
-      print('Running command on game ' + game_ID +': ' + cmd + ' piece ' + piece + ' to cell ' + cell, file=sys.stderr)
 
-      ## Make move (excuse my inconsistent casing): 
-      # board.movePiece(pos_tuple, move_pos_tuple) 
-      ## update database
-      # update_board(board)
+      response = 'OK'
+
+      piece_args = request.args.get('piece', None).split(',')
+      piece = (int(piece_args[0]), int(piece_args[1]))
+      cell_args = request.args.get('cell', None).split(',')
+      cell = (int(cell_args[0]), int(cell_args[1]))
+      print('Running command on game ' + game_ID +': ' + cmd + ' piece ' + request.args.get('piece', None) + ' to cell ' + request.args.get('cell', None), file=sys.stderr)
+
+      # get team from username
+      team = 1
+      if(board.getPlayer2() == session['username']):
+         team = 2
+
+      print(board.checkMoves(piece, team), file=sys.stderr)
+      if(not board.checkMoveLegal(piece, cell)):
+         response = 'NOT OK'
+      board.movePiece(piece, cell)
+      update_board(board)
+
+      return response, 200, {'Content-Type': 'text/plain'}
+
+   elif(cmd == 'check'):
+      response = 'FALSE'
+
+      print('Running command on game ' + game_ID +': ' + cmd, file=sys.stderr)
+
+      winner = board.checkWinner()
+
+      if(winner != 0):
+         response = 'We have a winner!'
+      
+
+      return response, 200, {'Content-Type': 'text/plain'}
    
-   response = 'Running command: ' + cmd
-   return response, 200, {'Content-Type': 'text/plain'}
 
 @app.route('/home', methods=['GET', 'POST'])
 def home():

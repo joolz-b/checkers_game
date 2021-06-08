@@ -6,19 +6,21 @@
           {%- if (y+x) % 2 == 1 %} cell-dark {%- endif %} cell-{{ x~'-'~y }}
           col-xs-2 cell" onclick='selectCell([{{ x }}, {{ y }}])'>
 
-          {%- if (y+x) % 2 == 0 and (x >= 0 and x <= 2) %}
-          <div class="checker checker-dark" onclick='selectPiece([{{ x }}, {{ y }}])'>
-            <!-- {{ x~', '~y }} -->
-            <img src="../../static/images/checker_dark.png" />
-          </div>
-          {%- endif %}
-
-          {%- if (y+x) % 2 == 0 and (x >= 5 and x <= 7) %}
-          <div class="checker checker-light" onclick='selectPiece([{{ x }}, {{ y }}])'>
-            <!-- {{ x~', '~y }} -->
-            <img src="../../static/images/checker_light.png" />
-          </div>
-          {%- endif %}
+          {%- for piece in board.exportPieces() %}
+            {%- if piece.position_x == x and piece.position_y == y %}
+              {%- if piece.team == 1 %}
+                <div class="checker checker-dark" onclick='selectPiece([{{ x }}, {{ y }}])'>
+                  <!-- {{ x~', '~y }} -->
+                  <img src="../../static/images/checker_dark.png" />
+                </div>
+              {%- else %}
+                <div class="checker checker-light" onclick='selectPiece([{{ x }}, {{ y }}])'>
+                  <!-- {{ x~', '~y }} -->
+                  <img src="../../static/images/checker_light.png" />
+                </div>
+              {%- endif %}
+            {%- endif %}
+          {%- endfor %}
 
         </div>
         {%- endfor %}
