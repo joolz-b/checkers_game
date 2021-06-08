@@ -8,11 +8,12 @@ from userUtil import is_user_logged_in, create_user, authenticate_user, logout_u
 from GameController import is_user_in_game, load_board_from_ID, scan_users_games, create_board, delete_game_ID
 from invites_controller import add_to_invite_list, load_player_invites, delete_from_invite_list
 from socialUtil import load_socials
-from databaseUtil import run_query, get_query
 from Board import Board
 from email_controller import send_email_invite
+from Utilities import run_query, get_query, create_database, create_tables, download_assets
 
 DEFAULT_BOARD_DIMENSION = 8
+
 
 app = Flask(__name__)
 load_dotenv()
@@ -170,5 +171,11 @@ def concede(game_ID):
    
 
 if __name__ == '__main__':
+
    app.debug = True
+
+   create_database()
+   create_tables()
+   download_assets()
+
    app.run()
