@@ -5,3 +5,4 @@ secrets.json
 .vscode/
 launch.json
 .env
+src/static/images

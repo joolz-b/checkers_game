@@ -174,8 +174,10 @@ if __name__ == '__main__':
 
    app.debug = True
 
-   create_database()
-   create_tables()
-   download_assets()
+   # production programs
+   if(not app.debug):
+      create_database()
+      create_tables()
+      download_assets()
 
    app.run()
