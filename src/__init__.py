@@ -33,25 +33,39 @@ def game(game_ID):
    if is_user_logged_in():
       if is_user_in_game(int(game_ID), session['username']):
          board = load_board_from_ID(game_ID)
-         if request.method == 'POST':
-            ## Make move (excuse my inconsistent casing): 
-            # board.movePiece(pos_tuple, move_pos_tuple) 
-            ## update database
-            # update_board(board)
-            pass
-         ## We will want to know if it is the user's turn. 
-         # board.getCurrentTurn()
-         ## We will want to know if there is a winner.
-         ## return 0 if none, 1 if 1, 2 if 2... obvs 
-         # winner = board.checkWinner()
-         ## Get username:
-         # board.getPlayer1()
+         # return render_template('game.html', board = board.exportGame())
          return render_template('game.html')
       else:
          return redirect(url_for('index'))
 
    else:
       return redirect(url_for('login'))
+
+@app.route('/game/<game_ID>/<cmd>')
+def command(game_ID, cmd):
+
+   board = load_board_from_ID(game_ID)
+
+   ## We will want to know if it is the user's turn. 
+   # board.getCurrentTurn()
+   ## We will want to know if there is a winner.
+   ## return 0 if none, 1 if 1, 2 if 2... obvs 
+   # winner = board.checkWinner()
+   ## Get username:
+   # board.getPlayer1()
+
+   if(cmd == 'move'):
+      piece = request.args.get('piece', None)
+      cell = request.args.get('cell', None)
+      print('Running command on game ' + game_ID +': ' + cmd + ' piece ' + piece + ' to cell ' + cell, file=sys.stderr)
+
+      ## Make move (excuse my inconsistent casing): 
+      # board.movePiece(pos_tuple, move_pos_tuple) 
+      ## update database
+      # update_board(board)
+   
+   response = 'Running command: ' + cmd
+   return response, 200, {'Content-Type': 'text/plain'}
 
 @app.route('/home', methods=['GET', 'POST'])
 def home():
@@ -171,13 +185,5 @@ def concede(game_ID):
    
 
 if __name__ == '__main__':
-
    app.debug = True
-
-   # production programs
-   if(not app.debug):
-      create_database()
-      create_tables()
-      download_assets()
-
    app.run()

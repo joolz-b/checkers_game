@@ -1,34 +1,37 @@
 {% extends 'layout.html' %}
 
 
+{% block title %}Checkers, in the Cloud{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{{url_for('static', filename='styles/home.css')}}">
+{% endblock %}
 
 {% block content %}
-<head>
-<h4>Welcome {{user_name}}!</h4>
-</head>
-<body>
-<h3>Current Games</h3>
-    {% if games|length > 0 %}
-        {% for game in games %}
-        {% if game['player_1'] != user_name %}
-        <p><a href="/game/{{game['game_ID']}}">Game with {{game['player_1']}}</a> | <a href="/concede/{{game['game_ID']}}">Concede Game</a></p>
+<div class='container player-home-body'></div>
+    <h4>Welcome {{user_name}}!</h4>
+    <h3>Current Games</h3>
+        {% if games|length > 0 %}
+            {% for game in games %}
+            {% if game['player_1'] != user_name %}
+            <p><a href="/game/{{game['game_ID']}}">Game with {{game['player_1']}}</a> | <a href="/concede/{{game['game_ID']}}">Concede Game</a></p>
+            {% else %}
+            <p><a href="/game/{{game['game_ID']}}">Game with {{game['player_2']}}</a> | <a href="/concede/{{game['game_ID']}}">Concede Game</a></p>
+            {% endif %}
+            {% endfor %}
         {% else %}
-        <p><a href="/game/{{game['game_ID']}}">Game with {{game['player_2']}}</a> | <a href="/concede/{{game['game_ID']}}">Concede Game</a></p>
+            <p>You don't currently have any games. Invite a user to a game below.</p>
         {% endif %}
-        {% endfor %}
-    {% else %}
-        <p>You don't currently have any games. Invite a user to a game below.</p>
+    <h3>Invites</h3>
+    {% if invites != None %}
+        {% if invites|length > 0 %}
+            {% for invite in invites %}
+            <p><a href="/invite/accept/{{invite}}">Accept {{invite}}'s invite</a></p>
+            {% endfor %}
+        {% else %}
+            <p>If anyone invites you to a game, you will see the invite here.</p>
+        {% endif %}
     {% endif %}
-<h3>Invites</h3>
-{% if invites != None %}
-    {% if invites|length > 0 %}
-        {% for invite in invites %}
-        <p><a href="/invite/accept/{{invite}}">Accept {{invite}}'s invite</a></p>
-        {% endfor %}
-    {% else %}
-        <p>If anyone invites you to a game, you will see the invite here.</p>
-    {% endif %}
-{% endif %}
     <h3>Opponents</h3>
     <form action="/home" method="POST">
         <p>
@@ -51,7 +54,5 @@
             <p>No users matched your search</p>
         {% endif %}
     {% endif %}
-</body>
+</div>
 {% endblock %}
-
-</html>
