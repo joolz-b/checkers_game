@@ -18,6 +18,12 @@ def find_other_users(current_user, username_email_contains):
       matches.append(record[0])
   return matches
 
+def get_email_from_username(username):
+  result = get_query(f"select email FROM users where username = '{username}'")
+  for record in result:  
+    email = record[0]
+  return email
+
 def confirm_user_exists(username):
   result = get_query(f"select username FROM users where username = '{username}'")
   exists = False
