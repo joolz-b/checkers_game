@@ -1,16 +1,14 @@
-import os
 import sys
 from dotenv import load_dotenv
 from flask import Flask, render_template, session, redirect, url_for, request
 from flask_dance.contrib.twitter import twitter
 
 from userUtil import is_user_logged_in, create_user, authenticate_user, logout_user, find_other_users, confirm_user_exists, get_email_from_username
-from GameController import is_user_in_game, load_board_from_ID, scan_users_games, create_board, delete_game_ID
+from GameController import is_user_in_game, load_board_from_ID, scan_users_games, create_board, delete_game_ID, update_board
 from invites_controller import add_to_invite_list, load_player_invites, delete_from_invite_list
 from socialUtil import load_socials
-from Board import Board
 from email_controller import send_email_invite
-from Utilities import run_query, get_query, create_database, create_tables, download_assets
+from Utilities import get_query, create_database, create_tables, download_assets
 
 DEFAULT_BOARD_DIMENSION = 8
 
@@ -48,14 +46,7 @@ def command(game_ID, cmd):
 
    board = load_board_from_ID(int(game_ID))
 
-   ## We will want to know if it is the user's turn. 
-   # board.getCurrentTurn()
-   ## We will want to know if there is a winner.
-   ## return 0 if none, 1 if 1, 2 if 2... obvs 
-   # winner = board.checkWinner()
-   ## Get username:
-   # board.getPlayer1()
-
+   # move a piece
    if(cmd == 'move'):
 
       response = 'OK'
@@ -79,6 +70,7 @@ def command(game_ID, cmd):
 
       return response, 200, {'Content-Type': 'text/plain'}
 
+   # checks for a winner
    elif(cmd == 'check'):
       response = 'FALSE'
 
@@ -212,4 +204,10 @@ def concede(game_ID):
 
 if __name__ == '__main__':
    app.debug = True
+
+   if(not app.debug):
+      create_database()
+      create_tables()
+      download_assets()
+
    app.run()

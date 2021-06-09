@@ -1,20 +1,22 @@
 import pymysql
 import os
 import sys
+import boto3
 from dotenv import load_dotenv
 
 load_dotenv()
 
 # creates the database
 def create_database():
-  run_query('create database checkers')
+  print('Creating database if it doesn\'t exist...', file=sys.stderr)
+  run_query('create database if not exists checkers')
 
 
 
 # creates the tables
 def create_tables():
   run_query('''
-      create table users (
+      create table if not exists users (
         id int not null auto_increment,
         username text,
         email text,
@@ -24,7 +26,7 @@ def create_tables():
     '''
   )
   run_query('''
-      create table results(
+      create table if not exists results(
         id int not null auto_increment,
         win int,
         lose int,
@@ -76,6 +78,20 @@ def get_database():
     database='checkers'
   )
 
+def download_assets():
+
+  s3 = boto3.client('s3', 
+    aws_access_key_id=os.environ.get('AWS_ACCESS_KEY_ID'),
+    aws_secret_access_key=os.environ.get('AWS_SECRET_ACCESS_KEY'), 
+    region_name=os.environ.get('AWS_REGION')
+  )
+  
+  s3.download_file('checkers-game-cc-sem1', 'cell_light.png', 'cell_light.png')
+  s3.download_file('checkers-game-cc-sem1', 'cell_dark.png', 'cell_dark.png')
+  s3.download_file('checkers-game-cc-sem1', 'checker_light.png', 'checker_light.png')
+  s3.download_file('checkers-game-cc-sem1', 'checker_dark.png', 'checker_dark.png')
+
+  print("Game assets downloaded from S3 bucket!\n", file=sys.stderr)
 
 if __name__ == '__main__':
 

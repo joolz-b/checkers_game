@@ -1,5 +1,5 @@
 from flask import session
-from databaseUtil import run_query, get_query
+from Utilities import run_query, get_query
 import sys, random, string
 
 def is_user_logged_in():
