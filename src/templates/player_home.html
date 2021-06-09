@@ -1,6 +1,5 @@
 {% extends 'layout.html' %}
 
-
 {% block title %}Checkers, in the Cloud{% endblock %}
 
 {% block styles %}
@@ -10,6 +9,7 @@
 {% block content %}
 <div class='container player-home-body'></div>
     <h4>Welcome {{user_name}}!</h4>
+    <a class='text-center align-middle btn btn-primary' href="/logout">LOG OUT</a>
     <h3>Current Games</h3>
         {% if games|length > 0 %}
             {% for game in games %}
