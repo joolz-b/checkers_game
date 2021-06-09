@@ -99,7 +99,7 @@ function setRefreshPage() {
   if(document.getElementById("game-status-current-turn").innerHTML.trim().localeCompare('false') == 0) {
     refresh = setInterval(()=>{
       location.reload()
-    }, 20000)
+    }, 10000)
   }
 }
 

@@ -208,6 +208,7 @@ if __name__ == '__main__':
    if(not app.debug):
       create_database()
       create_tables()
-      download_assets()
+      
+   download_assets()
 
    app.run()

@@ -86,10 +86,12 @@ def download_assets():
     region_name=os.environ.get('AWS_REGION')
   )
   
-  s3.download_file('checkers-game-cc-sem1', 'cell_light.png', 'cell_light.png')
-  s3.download_file('checkers-game-cc-sem1', 'cell_dark.png', 'cell_dark.png')
-  s3.download_file('checkers-game-cc-sem1', 'checker_light.png', 'checker_light.png')
-  s3.download_file('checkers-game-cc-sem1', 'checker_dark.png', 'checker_dark.png')
+  s3.download_file('checkers-game-cc-sem1', 'cell_light.png', 'src/static/images/cell_light.png')
+  s3.download_file('checkers-game-cc-sem1', 'cell_dark.png', 'src/static/images/cell_dark.png')
+  s3.download_file('checkers-game-cc-sem1', 'checker_light.png', 'src/static/images/checker_light.png')
+  s3.download_file('checkers-game-cc-sem1', 'checker_dark.png', 'src/static/images/checker_dark.png')
+  s3.download_file('checkers-game-cc-sem1', 'checker_king_dark.png', 'src/static/images/checker_king_dark.png')
+  s3.download_file('checkers-game-cc-sem1', 'checker_king_light.png', 'src/static/images/checker_king_light.png')
 
   print("Game assets downloaded from S3 bucket!\n", file=sys.stderr)
 

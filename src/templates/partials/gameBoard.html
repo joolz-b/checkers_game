@@ -9,15 +9,29 @@
           {%- for piece in board.exportPieces() %}
             {%- if piece.position_x == x and piece.position_y == y %}
               {%- if piece.team == 1 %}
-                <div class="checker checker-dark" onclick='selectPiece([{{ x }}, {{ y }}])'>
-                  <!-- {{ x~', '~y }} -->
-                  <img src="../../static/images/checker_dark.png" />
-                </div>
+                {%- if piece.king %}
+                  <div class="checker checker-dark" onclick='selectPiece([{{ x }}, {{ y }}])'>
+                    <!-- {{ x~', '~y }} -->
+                    <img src="../../static/images/checker_king_dark.png" />
+                  </div>
+                {%- else %}
+                  <div class="checker checker-dark" onclick='selectPiece([{{ x }}, {{ y }}])'>
+                    <!-- {{ x~', '~y }} -->
+                    <img src="../../static/images/checker_dark.png" />
+                  </div>
+                {%- endif %}
+              {%- else %}
+                {%- if piece.king %}
+                  <div class="checker checker-light" onclick='selectPiece([{{ x }}, {{ y }}])'>
+                    <!-- {{ x~', '~y }} -->
+                    <img src="../../static/images/checker_king_light.png" />
+                  </div>
               {%- else %}
                 <div class="checker checker-light" onclick='selectPiece([{{ x }}, {{ y }}])'>
                   <!-- {{ x~', '~y }} -->
                   <img src="../../static/images/checker_light.png" />
                 </div>
+              {%- endif %}
               {%- endif %}
             {%- endif %}
           {%- endfor %}
