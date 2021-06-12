@@ -4,7 +4,7 @@ from flask import Flask, render_template, session, redirect, url_for, request
 from flask_dance.contrib.twitter import twitter
 
 from userUtil import is_user_logged_in, create_user, authenticate_user, logout_user, find_other_users, confirm_user_exists, get_email_from_username
-from GameController import is_user_in_game, load_board_from_ID, scan_users_games, create_board, delete_game_ID, update_board
+from GameController import is_user_in_game, load_board_from_ID, scan_users_games, create_board, delete_game_ID, update_board, close_game
 from invites_controller import add_to_invite_list, load_player_invites, delete_from_invite_list
 from socialUtil import load_socials
 from email_controller import send_email_invite
@@ -80,6 +80,7 @@ def command(game_ID, cmd):
 
       if(winner != 0):
          response = 'We have a winner!'
+         close_game(board)
       
 
       return response, 200, {'Content-Type': 'text/plain'}
@@ -208,7 +209,6 @@ if __name__ == '__main__':
    if(not app.debug):
       create_database()
       create_tables()
-      
-   download_assets()
+      download_assets()
 
    app.run()

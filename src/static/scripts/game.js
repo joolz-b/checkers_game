@@ -73,7 +73,6 @@ function movePiece() {
   
 }
 
-// call after move function
 function checkWinner() {
   let request = new XMLHttpRequest()
   let game_id = window.location.href.split('/')

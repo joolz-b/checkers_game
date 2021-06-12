@@ -3,6 +3,9 @@ from Board import Board
 import boto3
 from boto3.dynamodb.conditions import Attr, Or
 from botocore.exceptions import ClientError
+import pymysql
+from Utilities import get_database, get_query
+import sys
 
 #Use this probably
 def check_game_exists_with_players(player_1_email, player_2_email):
@@ -205,3 +208,38 @@ def scan_users_games(username):
         start_key = response.get('LastEvaluatedKey', None)
         done = start_key is None
     return games
+
+def close_game(board):
+    game_ID = board.getGame_ID()
+
+    if(board.checkWinner() == 1):
+        winner_user = board.getPlayer1()
+        loser_user = board.getPlayer2()
+    else:
+        winner_user = board.getPlayer2()
+        loser_user = board.getPlayer1()
+
+    # get id of users
+    connection = get_database()
+
+    sql = "select id from checkers.users where username='" + winner_user + "'"
+    winner = get_query(sql)[0][0]
+
+    sql = "select id from checkers.users where username='" + loser_user + "'"
+    loser = get_query(sql)[0][0]
+
+    client = boto3.client('lambda',
+                              aws_access_key_id=get_secret("access_key_id"),
+                              aws_secret_access_key=get_secret(
+                                  "access_key_secret"),
+                              region_name="us-east-1"
+                              )
+    payload = '{ "game_ID": "' + str(game_ID) + '", "winner": "' + str(winner) +'", "loser":"' + str(loser) + '" }'
+    print(payload, file=sys.stderr)
+    response = client.invoke(
+        FunctionName='close_game',
+        InvocationType='Event',
+        Payload=payload
+    )
+
+    print(response, file=sys.stderr)

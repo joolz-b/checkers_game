@@ -27,10 +27,10 @@ def create_tables():
   )
   run_query('''
       create table if not exists results(
-        id int not null auto_increment,
-        win int,
-        lose int,
-        primary key (id)
+        win int not null,
+        lose int not null,
+        game_ID varchar(255) not null unique,
+        primary key (game_ID)
       )
     '''
   )
