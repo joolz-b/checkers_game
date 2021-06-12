@@ -29,8 +29,9 @@ def create_tables():
       create table if not exists results(
         win int not null,
         lose int not null,
-        game_ID varchar(255) not null unique,
-        primary key (game_ID)
+        game_ID varchar(255) not null,
+        finish_time datetime default current_timestamp,
+        primary key (game_ID, finish_time)
       )
     '''
   )
