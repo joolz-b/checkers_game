@@ -1,4 +1,27 @@
 .player-home-body {
-  margin: 0 5em;
-  padding: 1em;
+  margin: auto;
+  width: 75%;
+}
+
+.title {
+  margin-bottom: 2em;
+}
+
+
+h3 {
+  margin-top: 2em;
+}
+
+.won {
+  color: rgb(36, 175, 36);
+  font-weight: bold;
+}
+
+.lost {
+  color: rgb(197, 51, 51);
+  font-weight: bold;
+}
+
+.name {
+  font-weight: bold;
 }

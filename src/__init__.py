@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 from flask import Flask, render_template, session, redirect, url_for, request
 from flask_dance.contrib.twitter import twitter
 
-from userUtil import is_user_logged_in, create_user, authenticate_user, logout_user, find_other_users, confirm_user_exists, get_email_from_username
+from userUtil import is_user_logged_in, create_user, authenticate_user, logout_user, find_other_users, confirm_user_exists, get_email_from_username, get_user_match_history
 from GameController import is_user_in_game, load_board_from_ID, scan_users_games, create_board, delete_game_ID, update_board, close_game
 from invites_controller import add_to_invite_list, load_player_invites, delete_from_invite_list
 from socialUtil import load_socials
@@ -93,11 +93,11 @@ def home():
       invites = load_player_invites(session['username'])
       if request.method == 'GET':
          query = None
-         return render_template('player_home.html', user_name=session['username'], games=games, invites= invites, results = None)
+         return render_template('player_home.html', user_name=session['username'], games=games, invites= invites, results = None, history=get_user_match_history(session['username']))
       elif request.method == 'POST':
          form = request.form
          results = find_other_users(session['username'], form['user_search'])
-         return render_template('player_home.html', user_name=session['username'], games=games, invites= invites, results = results)
+         return render_template('player_home.html', user_name=session['username'], games=games, invites= invites, results = results, history=get_user_match_history(session['username']))
    else:
       return redirect(url_for('login'))
 

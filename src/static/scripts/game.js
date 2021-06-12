@@ -62,6 +62,8 @@ function movePiece() {
     )
     request.send()
 
+    document.getElementById('game-status-making-move').style.display="inline"
+
     // reset selection
     selectCell(null)
     selectPiece(null)

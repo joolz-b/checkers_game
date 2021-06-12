@@ -1,6 +1,8 @@
 from flask import session
 from Utilities import run_query, get_query
 import sys, random, string
+import pymysql
+import datetime
 
 def is_user_logged_in():
   res = False
@@ -66,3 +68,40 @@ def create_user(username, email, password):
 
 def logout_user():
   session.clear()
+
+def get_user_match_history(username):
+
+  # get id of user
+  sql = "select id from checkers.users where username='%s'" % (username)
+  id = get_query(sql)[0][0]
+
+  # get match history
+  sql = "select * from checkers.results where win='%s' or lose='%s'" % (id, id)
+  res = get_query(sql)
+
+  history = []
+
+  for item in res:
+
+    print(item, file=sys.stderr)
+
+    win = None
+    against = None
+    timestamp = item[3].strftime('{S} %b').replace('{S}', str(item[3].day) + suffix(item[3].day))
+    
+    if item[0] == id:
+      win = True
+      sql = 'select username from checkers.users where id="%s"' % (item[1])
+    else:
+      win = False
+      sql = 'select username from checkers.users where id="%s"' % (item[0])
+
+    against = get_query(sql)[0][0]
+
+    match = [win, against, timestamp]
+    history.append(match)
+
+  return history
+
+def suffix(d):
+    return 'th' if 11<=d<=13 else {1:'st',2:'nd',3:'rd'}.get(d%10, 'th')

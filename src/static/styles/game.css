@@ -10,14 +10,16 @@
   display: none;
 }
 
-.loader {
+
+#loader {
   border: .2em solid #f3f3f3; /* Light grey */
   border-top: .2em solid #3498db; /* Blue */
   border-radius: 50%;
-  width: 2em;
-  height: 2em;
+  width: 1.2em;
+  height: 1.2em;
   animation: spin 2s linear infinite;
   display: inline-block;
+  margin-left: .5em;
 }
 
 @keyframes spin {
