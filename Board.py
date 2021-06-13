@@ -99,10 +99,10 @@ class Board:
                 piece.kingMe()
             if self.checkMoveJump(pos, movePos):
                 self.removeJumpedPiece(pos, movePos)
-                if self.checkJumpAvailable(team):
-                    makeAnotherMove = True
-                else:
-                    makeAnotherMove = False
+                makeAnotherMove = False
+                for nextMove in self.checkMoves(movePos, team):
+                    if self.checkMoveJump(movePos, nextMove):
+                        makeAnotherMove = True
             else:
                 makeAnotherMove = False
         else:
@@ -129,6 +129,12 @@ class Board:
         elif len(self.team_2) == 0:
             winner = 1
         return winner
+    
+    def concede(self, team):
+        if team == 1:
+            self.team_1 = []
+        elif team == 2:
+            self.team_2 = []
 
     def exportPieces(self):
         pieces = []

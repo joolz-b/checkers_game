@@ -6,3 +6,9 @@ secrets.json
 .vscode/
 launch.json
 .env
+cam_secrets.json
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml

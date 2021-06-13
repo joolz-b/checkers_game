@@ -10,14 +10,14 @@ from socialUtil import load_socials
 from email_controller import send_email_invite
 from Utilities import get_query, create_database, create_tables, download_assets
 
+
+application = Flask(__name__)
+load_dotenv()
+load_socials(application)
+
 DEFAULT_BOARD_DIMENSION = 8
 
-
-app = Flask(__name__)
-load_dotenv()
-load_socials(app)
-
-@app.route('/')
+@application.route('/')
 def index():
    print(session, file=sys.stderr)
    if is_user_logged_in():
@@ -26,7 +26,7 @@ def index():
       return render_template('index.html')
 
 # displays the actual game board
-@app.route('/game/<game_ID>', methods=['POST', 'GET'])
+@application.route('/game/<game_ID>', methods=['POST', 'GET'])
 def game(game_ID):
    if is_user_logged_in():
       if is_user_in_game(int(game_ID), session['username']):
@@ -41,7 +41,7 @@ def game(game_ID):
    else:
       return redirect(url_for('login'))
 
-@app.route('/game/<game_ID>/<cmd>')
+@application.route('/game/<game_ID>/<cmd>')
 def command(game_ID, cmd):
 
    board = load_board_from_ID(int(game_ID))
@@ -86,7 +86,7 @@ def command(game_ID, cmd):
       return response, 200, {'Content-Type': 'text/plain'}
    
 
-@app.route('/home', methods=['GET', 'POST'])
+@application.route('/home', methods=['GET', 'POST'])
 def home():
    if is_user_logged_in():
       games = scan_users_games(session['username'])
@@ -102,11 +102,11 @@ def home():
       return redirect(url_for('login'))
 
 # information on how to play the game
-@app.route('/tutorial')
+@application.route('/tutorial')
 def tutorial():
    return render_template('tutorial.html')
 
-@app.route('/login', methods=['POST', 'GET'])
+@application.route('/login', methods=['POST', 'GET'])
 def login():
    
    if request.method == 'GET':
@@ -123,7 +123,7 @@ def login():
          return render_template('login.html', twitter_login=url_for('twitter.login'), facebook_login=url_for('facebook.login'), error="Username or password invalid")
 
 # after SSO is used, get the credentials
-@app.route('/authorize')
+@application.route('/authorize')
 def authorize():
 
    resp = twitter.get("account/verify_credentials.json")
@@ -138,13 +138,13 @@ def authorize():
          return redirect(url_for('home'))
 
 
-@app.route('/logout')
+@application.route('/logout')
 def logout():
    logout_user()
    return redirect(url_for('index'))
    
 
-@app.route('/signup', methods=['POST', 'GET'])
+@application.route('/signup', methods=['POST', 'GET'])
 def signup():
 
    if request.method == 'GET':
@@ -166,7 +166,7 @@ def signup():
       else:
          return render_template('signup.html', error='Account already exists for this email')
 
-@app.route('/invite/send/<username>')
+@application.route('/invite/send/<username>')
 def invite(username):
    if is_user_logged_in():
       if confirm_user_exists(username) and username != session['username']:
@@ -177,7 +177,7 @@ def invite(username):
    else:
       return redirect(url_for('index'))
 
-@app.route('/invite/accept/<username>')
+@application.route('/invite/accept/<username>')
 def accept(username):
    if is_user_logged_in():
       if confirm_user_exists(username) and username != session['username'] and username in load_player_invites(session['username']):
@@ -189,12 +189,19 @@ def accept(username):
    else:
       return redirect(url_for('login'))
 
-@app.route('/concede/<game_ID>')
+@application.route('/concede/<game_ID>')
 def concede(game_ID):
    if is_user_logged_in():
       try:
          game_int = int(game_ID)
          if is_user_in_game(game_int, session['username']):
+            board = load_board_from_ID(game_int)
+            if session['username'] == board.getPlayer1():
+               player = 1
+            else:
+               player = 2
+            board.concede(player)
+            close_game(board)
             delete_game_ID(game_int)
          return redirect(url_for('home'))
       except ValueError:
@@ -204,11 +211,11 @@ def concede(game_ID):
    
 
 if __name__ == '__main__':
-   app.debug = True
+   application.debug = False
 
-   if(not app.debug):
+   if(not application.debug):
       create_database()
       create_tables()
       download_assets()
 
-   app.run()
+   application.run()
