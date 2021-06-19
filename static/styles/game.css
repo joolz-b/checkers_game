@@ -7,9 +7,21 @@
 
 .game-status {
   margin: 1em;
+  width: 100%;
+  /* display: none; */
+}
+
+#game-status-piece {
   display: none;
 }
 
+#game-status-cell {
+  display: none;
+}
+
+#game-status-current-turn {
+  display: none;
+}
 
 #loader {
   border: .2em solid #f3f3f3; /* Light grey */
@@ -17,6 +29,17 @@
   border-radius: 50%;
   width: 1.2em;
   height: 1.2em;
+  animation: spin 2s linear infinite;
+  display: inline-block;
+  margin-left: .5em;
+}
+
+#loader-large {
+  border: .2em solid #f3f3f3; /* Light grey */
+  border-top: .2em solid #3498db; /* Blue */
+  border-radius: 50%;
+  width: 1em;
+  height: 1em;
   animation: spin 2s linear infinite;
   display: inline-block;
   margin-left: .5em;

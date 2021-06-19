@@ -5,33 +5,42 @@ var refresh = null
 
 function selectCell(pos) {
 
-  if(pos) {
-    selectedCell = pos
-    console.log('selected cell: ' + pos.toString())
-    document.getElementById("game-status-cell").innerHTML = 'Selected cell: ' + pos.toString()
-
-    if(selectedPiece.toString().localeCompare(selectedCell.toString()) != 0) {
-      movePiece()
-    }
-  }
-  else {
+  if(selectedCell) {
+    document.getElementById("cell-" + selectedCell[0] + "-" + selectedCell[1]).style.filter = null
     selectedCell = null
     document.getElementById("game-status-cell").innerHTML = ''
+  }
+
+  if(pos) {
+    selectedCell = pos
+    console.log('selected cell: ' + selectedCell.toString())
+    document.getElementById("game-status-cell").innerHTML = 'Selected cell: ' + selectedCell.toString()
+
+    if(selectedPiece.toString().localeCompare(selectedCell.toString()) != 0) {
+      document.getElementById("cell-" + selectedCell[0] + "-" + selectedCell[1]).style.filter = "brightness(190%)"
+      movePiece()
+    }
   }
   
 }
 
 function selectPiece(pos) {
 
+  // reset currently selected piece
+  if(selectedPiece) {
+    document.getElementById("cell-" + selectedPiece[0] + "-" + selectedPiece[1]).style.filter = null
+    selectedPiece = null
+    document.getElementById("game-status-piece").innerHTML = ''
+  }
+
   if(pos) {
+
+    document.getElementById("game-status-info").innerHTML = ""
     
     selectedPiece = pos
     console.log('selected piece: ' + pos.toString())
     document.getElementById("game-status-piece").innerHTML = 'Selected piece: ' + pos.toString()
-  }
-  else {
-    selectedPiece = null
-    document.getElementById("game-status-piece").innerHTML = ''
+    document.getElementById("cell-" + pos[0] + "-" + pos[1]).style.filter = "brightness(190%)"
   }
 }
 
@@ -40,6 +49,8 @@ function movePiece() {
 
   if(document.getElementById("game-status-current-turn").innerHTML.trim().localeCompare('true') == 0) {
     console.log('moving piece to cell ' + selectedCell.toString())
+    document.getElementById("game-status-info").innerHTML = "Moving piece <span id='loader'></span>"
+    
 
     let request = new XMLHttpRequest()
     let game_id = window.location.href.split('/')
@@ -52,6 +63,7 @@ function movePiece() {
         }
         else {
           console.log(request.responseText)
+          document.getElementById("game-status-info").innerHTML = "Invalid move. Please select your piece and then select a valid cell."
         }
       }
     }
@@ -62,14 +74,13 @@ function movePiece() {
     )
     request.send()
 
-    document.getElementById('game-status-making-move').style.display="inline"
-
     // reset selection
     selectCell(null)
     selectPiece(null)
   }
   else {
     console.log('please wait for opponent to complete their turn.')
+    document.getElementById("game-status-info").innerHTML = "Please wait for opponent to complete their turn."
   }
 
   

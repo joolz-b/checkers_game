@@ -2,8 +2,8 @@
   {%- for x in range(8) %}
     <div class="row">
       {%- for y in range(8) %}
-          <div class="
-          {%- if (y+x) % 2 == 1 %} cell-dark {%- endif %} cell-{{ x~'-'~y }}
+          <div id="cell-{{ x~'-'~y }}" class="
+          {%- if (y+x) % 2 == 1 %} cell-dark {%- endif %}
           col-xs-2 cell" onclick='selectCell([{{ x }}, {{ y }}])'>
 
           {%- for piece in board.exportPieces() %}

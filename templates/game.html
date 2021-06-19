@@ -18,13 +18,13 @@
           {%- if board.getPlayer1() == session['username'] %}
             Your turn {{ session['username'] }}! Make a move.
           {%- else %}
-            Awaiting opponent's turn.
+            Awaiting opponent's turn <span id='loader-large'></span>
           {%- endif %}
         {%- else %}
           {%- if board.getPlayer2() == session['username'] %}
             Your turn {{ session['username'] }}! Make a move.
           {%- else %}
-            Awaiting opponent's turn.
+            Awaiting opponent's turn <span id='loader-large'></span>
           {%- endif %}
         {%- endif %}
       </p>
@@ -44,6 +44,8 @@
       false
       {%- endif %}
     </p>
+    <p id='game-status-info'></p>
+    
   </div>
 
  

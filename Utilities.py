@@ -31,7 +31,9 @@ def create_tables():
         lose int not null,
         game_ID varchar(255) not null,
         finish_time datetime default current_timestamp,
-        primary key (game_ID, finish_time)
+        primary key (game_ID, finish_time),
+        constraint fk_win foreign key (win) references users(id),
+        constraint fk_lose foreign key (win) references users(id)
       )
     '''
   )

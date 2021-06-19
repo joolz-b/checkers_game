@@ -211,7 +211,7 @@ def concede(game_ID):
    
 
 if __name__ == '__main__':
-   application.debug = False
+   application.debug = True
 
    if(not application.debug):
       create_database()
