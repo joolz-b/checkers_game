@@ -1,6 +1,7 @@
 env/
 venv/
 src/__pycache__/
+__pycache__/
 src/static/images/
 secrets.json
 .vscode/

@@ -192,7 +192,10 @@ class Board:
         return movePos in self.checkMoves(pos, team)
 
     def checkMoveJump(self, pos, movePos):
-        return abs(pos[0] - movePos[0])  == 2 and abs(pos[1] - movePos[1])  == 2
+        if pos and movePos:
+            return abs(pos[0] - movePos[0])  == 2 and abs(pos[1] - movePos[1])  == 2
+        else:
+            return False
 
     def checkJumpAvailable(self, team):
         if team ==1:
